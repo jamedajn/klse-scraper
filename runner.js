@@ -3,7 +3,7 @@ import puppeteer from "puppeteer";
 
 (async () => {
     const job = workerData.jobs[workerData.thread_count];
-    console.log('Running on new thread')
+    console.log('Running on new thread with', job.length, "of jobs")
     for (let index of job) {
       try {
         const browser = await puppeteer.launch({
