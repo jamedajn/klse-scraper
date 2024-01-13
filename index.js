@@ -3,7 +3,7 @@ import { Worker } from "worker_threads";
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
 const data = []
 const jobs = []
-const thread_count = 4
+const thread_count = 16
 
 for (let i = 0; i < indexes.length; i += indexes.length / thread_count) {
     jobs.push(indexes.slice(i, i + indexes.length / thread_count));
@@ -42,7 +42,8 @@ const start = performance.now()
   );
   fs.writeFileSync(
     `./data/${new Date().toLocaleString("default", {
-      month: "long",
+      day: "numeric",
+      month: "numeric",
       year: "numeric",
     })}.txt`,
     data.join("\n")
