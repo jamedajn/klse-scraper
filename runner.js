@@ -24,7 +24,9 @@ import puppeteer from "puppeteer";
           );
           await browser.close();
         parentPort.postMessage(`${name} ${price}`);
-      } catch (e) {}
+      } catch (e) {
+          console.log(e)
+      }
     }
   
     parentPort.postMessage("end");
