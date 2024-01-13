@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { Worker } from "worker_threads";
+import runner from './runner.js'
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
 const data = []
 const jobs = []
