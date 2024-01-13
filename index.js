@@ -1,30 +1,52 @@
-import puppeteer from 'puppeteer';
 import fs from 'fs'
+import { Worker } from "worker_threads";
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
-const wait = (time) => new Promise((resolve) => setTimeout(() => resolve(), time));
-(async () => {
-    for(var index of indexes) {
-try {
-  const browser = await puppeteer.launch({
-    headless: "new"
-  });
+const data = []
+const jobs = []
+const thread_count = 4
 
-  const page = await browser.newPage();
-  await page.setUserAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.0 Safari/537.36");
-  await page.goto(`https://www.klsescreener.com/v2/stocks/view/${index}`, {waitUntil: ['networkidle0'], timeout: 180000});
-
-  var name = await page.evaluate(
-    `document.querySelector(".d-flex .align-items-baseline h2").innerText`,
-    { timeout: 180000 },
-  );
-  var price = await page.evaluate(
-    `document.getElementById("price").innerText`,
-    { timeout: 180000 },
-  );
-  console.log(name, price)
-  
-  await browser.close();
-}catch(e) {}
-
+for (let i = 0; i < indexes.length; i += indexes.length / thread_count) {
+    jobs.push(indexes.slice(i, i + indexes.length / thread_count));
   }
-})();
+async function createWorker(i) {
+    return new Promise(function (resolve, reject) {
+      const worker = new Worker("./runner.js", {
+        workerData: { thread_count: i, jobs },
+      });
+      worker.on("message", (dt) => {
+        if (dt == "end") {
+          worker.terminate();
+          resolve(dt);
+        }else {
+        data.push(dt)
+        console.log(dt)
+        }
+      });
+      worker.on("error", (msg) => {
+        reject(`An error ocurred: ${msg}`);
+      });
+    });
+  }
+
+  const workerPromises = [];
+  for (let i = 0; i < thread_count; i++) {
+    workerPromises.push(createWorker(i));
+  }
+
+  ;(async() => {
+const start = performance.now()
+  await Promise.all(workerPromises);
+  fs.writeFileSync(
+    "./data/data.txt",
+    data.join("\n"),
+  );
+  fs.writeFileSync(
+    `./data/${new Date().toLocaleString("default", {
+      month: "long",
+      year: "numeric",
+    })}.txt`,
+    data.join("\n")
+  );
+  const end = performance.now()
+  console.log("Job done with", data.length, "indexes in", Math.round((end - start) / 1000), 'seconds')
+  })()
