@@ -23,7 +23,7 @@ import puppeteer from "puppeteer";
             { timeout: 180000 },
           );
           await browser.close();
-        parentPort.postMessage(`${name} ${price}`);
+        parentPort.postMessage(`${index} ${name} ${price}`);
       } catch (e) {
           console.log(e)
       }
