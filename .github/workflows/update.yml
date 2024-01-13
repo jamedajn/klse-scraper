@@ -22,7 +22,7 @@ jobs:
  
     - name: Run
       run: |
-        npm install puppeteer
+        npm install puppeteer@20.7.4
         node index.js
     - name: Commit files
       run: |
