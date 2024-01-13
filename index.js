@@ -41,11 +41,11 @@ const start = performance.now()
     data.join("\n"),
   );
   fs.writeFileSync(
-    `./data/${new Date().toLocaleString("default", {
+    `./data/${new Date().toLocaleString("en-US", {
       day: "numeric",
       month: "numeric",
       year: "numeric",
-    })}.txt`,
+    }).split("/").join("-")}.txt`,
     data.join("\n")
   );
   const end = performance.now()
