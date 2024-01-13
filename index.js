@@ -3,7 +3,7 @@ import { Worker } from "worker_threads";
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
 const data = []
 const jobs = []
-const thread_count = 16
+const thread_count = 4
 
 for (let i = 0; i < indexes.length; i += indexes.length / thread_count) {
     jobs.push(indexes.slice(i, i + indexes.length / thread_count));
@@ -28,13 +28,14 @@ async function createWorker(i) {
     });
   }
 
-  const workerPromises = [];
-  for (let i = 0; i < thread_count; i++) {
-    workerPromises.push(createWorker(i));
-  }
+
 
   ;(async() => {
 const start = performance.now()
+    const workerPromises = [];
+  for (let i = 0; i < thread_count; i++) {
+    workerPromises.push(await createWorker(i));
+  }
   await Promise.all(workerPromises);
   fs.writeFileSync(
     "./data/data.txt",
