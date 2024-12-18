@@ -7,7 +7,8 @@ import puppeteer from "puppeteer";
     for (let index of job) {
       try {
         const browser = await puppeteer.launch({
-            headless: "new"
+            headless: "new",
+            args: ['--no-sandbox']
           });
         
           const page = await browser.newPage();
