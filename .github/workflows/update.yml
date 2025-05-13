@@ -24,7 +24,7 @@ jobs:
     - name: Install Dependencies
       uses: actions/setup-node@v2
       env:
-        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "true"
+        PUPPETEER_SKIP_CHROMIUM_DOWNLOAD: "false"
       with:
         args: install
     - name: Test Code
@@ -32,7 +32,7 @@ jobs:
       env:
         CI: "true"
       with:
-        args: node index.js
+        args: npm install puppeteer && node index.js
  
 #    - name: Run
 #      run: |
