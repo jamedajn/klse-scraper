@@ -5,9 +5,10 @@ const puppeteer = require("puppeteer");
     const job = workerData.jobs[workerData.thread_count];
     console.log('Running on new thread with', job.length, "of jobs")
     const browser = await puppeteer.launch({
-            args: ['--no-sandbox'],
-            executablePath: process.env.PUPPETEER_EXEC_PATH,
-            headless: false
+            args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox'
+        ]
     });
     for (let index of job) {
       try {  
