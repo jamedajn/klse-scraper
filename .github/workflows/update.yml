@@ -19,7 +19,9 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
-
+    - name: Run
+      run: |
+        npm install puppeteer
   
     - name: Install Dependencies
       uses: actions/setup-node@v2
