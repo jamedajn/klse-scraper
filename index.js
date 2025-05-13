@@ -1,5 +1,5 @@
-import fs from 'fs'
-import { Worker } from "worker_threads";
+const fs = require('fs')
+const { Worker } = require("worker_threads");
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
 const data = []
 const jobs = []
