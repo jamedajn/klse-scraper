@@ -8,7 +8,7 @@ console.log(indexes.length, "of indexes to scrape")
 
 async function createWorker(i) {
     return new Promise(function (resolve, reject) {
-      const worker = new Worker("./runner.js", {
+      const worker = new Worker("./speeder.js", {
         workerData: { thread_count: i, jobs },
       });
       worker.on("message", (dt) => {
@@ -17,7 +17,7 @@ async function createWorker(i) {
           resolve(dt);
         }else {
         data.push(dt)
-        console.log(dt)
+        console.log(`${data.length}/${indexes.length}`,dt)
         }
       });
       worker.on("error", (msg) => {
