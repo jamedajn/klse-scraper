@@ -6,7 +6,7 @@ const puppeteer = require("puppeteer");
     console.log('Running on new thread with', job.length, "of jobs")
     const browser = await puppeteer.launch({
             args: ['--no-sandbox'],
-            executablePath: process.env.PUPPETEER_EXEC_PATH, // set by docker container
+            executablePath: process.env.PUPPETEER_EXEC_PATH,
             headless: false
     });
     for (let index of job) {
