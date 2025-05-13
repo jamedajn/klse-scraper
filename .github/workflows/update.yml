@@ -26,6 +26,8 @@ jobs:
       with:
         files: |
           index.js
+          indexes.txt
+          speeder.js
  
 #    - name: Run
 #      run: |
