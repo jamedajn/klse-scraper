@@ -5,8 +5,9 @@ const puppeteer = require("puppeteer");
     const job = workerData.jobs[workerData.thread_count];
     console.log('Running on new thread with', job.length, "of jobs")
     const browser = await puppeteer.launch({
-            headless: "new",
-            args: ['--no-sandbox']
+            args: ['--no-sandbox'],
+            executablePath: process.env.PUPPETEER_EXEC_PATH, // set by docker container
+            headless: false
     });
     for (let index of job) {
       try {  
