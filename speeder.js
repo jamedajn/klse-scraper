@@ -9,7 +9,7 @@ const puppeteer = require("puppeteer");
             '--no-sandbox',
             '--disable-setuid-sandbox'
         ]
-    });
+    }).catch(console.log);
     for (let index of job) {
       try {  
           var page = await browser.newPage();
@@ -19,11 +19,11 @@ const puppeteer = require("puppeteer");
           var name = await page.evaluate(
             `document.querySelector(".d-flex .align-items-baseline h2").innerText`,
             { timeout: 180000 },
-          );
+          ).catch(err => { return null });
           var price = await page.evaluate(
             `document.getElementById("price").innerText`,
             { timeout: 180000 },
-          );
+          ).catch(err => { return 0 });
         parentPort.postMessage(`${index} ${name} ${price}`);
         await page.close()
       } catch (e) {
