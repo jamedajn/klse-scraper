@@ -1,20 +1,13 @@
 const { workerData, parentPort } = require("worker_threads");
 const puppeteer = require("puppeteer");
 
-(async () => {
-    const job = workerData.jobs[workerData.thread_count];
-    console.log('Running on new thread with', job.length, "jobs");
-
-    const browser = await puppeteer.launch({
-        args: ['--no-sandbox', '--disable-setuid-sandbox']
-    });
-
-const { workerData, parentPort } = require("worker_threads");
-const puppeteer = require("puppeteer");
+process.on('unhandledRejection', (reason, promise) => {
+    console.error('Unhandled Rejection:', reason);
+});
 
 (async () => {
     const job = workerData.jobs[workerData.thread_count];
-    console.log('Running on new thread with', job.length, "jobs");
+    console.log('Running on new thread with', job.length, 'jobs');
 
     const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox']
@@ -25,6 +18,7 @@ const puppeteer = require("puppeteer");
     for (let index of job) {
         let page = null;
         console.log(`Starting job for: ${index}`);
+
         try {
             const result = await Promise.race([
                 (async () => {
@@ -50,11 +44,11 @@ const puppeteer = require("puppeteer");
                     return `${index} ${name} ${price}`;
                 })(),
                 new Promise((_, reject) =>
-                    setTimeout(() => reject(new Error("Timeout")), TIMEOUT))
+                    setTimeout(() => reject(new Error("Timeout")), TIMEOUT)
+                )
             ]);
 
             parentPort.postMessage(result);
-
         } catch (e) {
             if (e.message === "Timeout") {
                 console.log(`Timeout: Skipping job ${index} after ${TIMEOUT / 1000} seconds`);
@@ -69,26 +63,6 @@ const puppeteer = require("puppeteer");
                     console.log(`Failed to close page for job ${index}:`, err.message);
                 }
             }
-        }
-    }
-
-    await browser.close();
-    parentPort.postMessage("end");
-})();            await page.close({ runBeforeUnload: false });
-                } catch (err) {
-                    console.log(`Failed to close page for job ${index}:`, err.message);
-                }
-            }
-        }
-    }
-
-    await browser.close();
-    parentPort.postMessage("end");
-})();               })(),
-                new Promise((_, reject) => setTimeout(() => reject(new Error("Timeout reached")), TIMEOUT))
-            ]);
-        } catch (e) {
-            console.log(`Error with job ${index}:`, e.message || e);
         }
     }
 
