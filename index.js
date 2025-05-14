@@ -3,7 +3,7 @@ const { Worker } = require("worker_threads");
 const indexes = fs.readFileSync("./indexes.txt", { encoding: 'utf-8' }).split('\r\n')
 const data = []
 const jobs = []
-const thread_count = 4
+const thread_count = 8
 console.log(indexes.length, "of indexes to scrape")
 
 async function createWorker(i) {

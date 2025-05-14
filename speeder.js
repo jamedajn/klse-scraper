@@ -13,7 +13,7 @@ process.on('unhandledRejection', (reason, promise) => {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
 
-    const TIMEOUT = 180000; // 3 minutes
+    const TIMEOUT = 1180000; // 3 minutes
 
     for (let index of job) {
         let page = null;
