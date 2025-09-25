@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "puppeteer": "^24.22.2"
+    "puppeteer": "^24.22.3"
   },
   "type": "cjs"
 }
