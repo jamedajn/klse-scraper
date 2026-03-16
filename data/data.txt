@@ -522,7 +522,7 @@
 7089 null 0
 2011 null 0
 8486 null 0
-4235 LIONIND 0.150
+4235 LIONIND 0.140
 6645 null 0
 0182 null 0
 7126 null 0
